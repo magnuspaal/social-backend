@@ -1,0 +1,23 @@
+server:
+  port: 8081
+  error:
+    include-message: always
+    include-binding-errors: always
+spring:
+  datasource:
+    password: password
+    url: jdbc:postgresql://localhost:3213/social
+    username: magnus
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: false
+application:
+  api:
+    allowed-origins: ${ALLOWED_ORIGINS}
+  jwt:
+    secret-key: ${JWT_SECRET}
