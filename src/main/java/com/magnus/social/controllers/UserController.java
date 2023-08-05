@@ -5,11 +5,14 @@ import com.magnus.social.follow.Follow;
 import com.magnus.social.follow.FollowService;
 import com.magnus.social.post.Post;
 import com.magnus.social.post.PostService;
+import com.magnus.social.upload.UploadService;
 import com.magnus.social.user.User;
+import com.magnus.social.user.UserRepository;
 import com.magnus.social.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Objects;
@@ -23,6 +26,8 @@ public class UserController {
   private final FollowService followerService;
   private final PostService postService;
   private final AuthenticationService authenticationService;
+  private final UploadService uploadService;
+  private final UserRepository userRepository;
 
   @GetMapping("/me")
   public ResponseEntity<User> getAuthenticatedUser() {
@@ -73,5 +78,20 @@ public class UserController {
     User followedBy = authenticationService.getAuthenticatedUser();
     User followed = userService.getUserById(id);
     return ResponseEntity.ok(followerService.toggleFollower(followedBy, followed));
+  }
+
+  @PostMapping("/{id}/upload-image")
+  public ResponseEntity<User> uploadImage(
+      @PathVariable Long id,
+      @RequestParam(name = "image") MultipartFile image
+  ) {
+    User user = authenticationService.getAuthenticatedUser();
+    if (!Objects.equals(user.getId(), id)) {
+      return ResponseEntity.status(403).build();
+    }
+    String fileName = uploadService.uploadFile(image);
+    User dbUser = userService.getUserById(user.getId());
+    dbUser.setImageName(fileName);
+    return ResponseEntity.ok(userRepository.save(dbUser));
   }
 }

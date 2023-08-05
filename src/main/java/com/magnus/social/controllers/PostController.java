@@ -1,21 +1,17 @@
 package com.magnus.social.controllers;
 
 import com.magnus.social.auth.AuthenticationService;
-import com.magnus.social.like.Like;
 import com.magnus.social.like.LikeService;
 import com.magnus.social.post.Post;
 import com.magnus.social.post.PostService;
 import com.magnus.social.post.dto.PostRequest;
 import com.magnus.social.user.User;
 import com.magnus.social.user.UserService;
-import jakarta.persistence.EntityManager;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController

@@ -13,6 +13,7 @@ import java.util.List;
 @Setter
 public class ApiProperties {
   private String allowedOrigins;
+  private String fileServerUrl;
 
   public List<String> getAllowedOrigins() {
     return List.of(allowedOrigins.split(","));

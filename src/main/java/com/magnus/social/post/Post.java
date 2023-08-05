@@ -96,9 +96,11 @@ public class Post extends BaseEntity {
 
   public void updateLikes(Like updatedLike) {
     if (updatedLike.getDeletedAt() == null) {
+      this.getLikes().add(updatedLike);
       this.likeCount += 1;
       this.liked = true;
     } else {
+      this.getLikes().remove(updatedLike);
       this.likeCount -= 1;
       this.liked = false;
     }

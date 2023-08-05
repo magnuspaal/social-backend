@@ -31,6 +31,7 @@ public class User extends BaseEntity {
     private String lastName;
     private String email;
     private String username;
+    private String imageName;
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
@@ -42,11 +43,11 @@ public class User extends BaseEntity {
     @JsonIgnore
     private List<Like> likes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "followedBy")
+    @OneToMany(mappedBy = "followedBy", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Follow> following;
 
-    @OneToMany(mappedBy = "followed")
+    @OneToMany(mappedBy = "followed", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Follow> followers;
 
