@@ -5,13 +5,14 @@ import com.magnus.social.follow.Follow;
 import com.magnus.social.follow.FollowService;
 import com.magnus.social.post.Post;
 import com.magnus.social.post.PostService;
-import com.magnus.social.upload.UploadService;
+import com.magnus.social.file.FileService;
 import com.magnus.social.user.User;
 import com.magnus.social.user.UserRepository;
 import com.magnus.social.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public class UserController {
   private final FollowService followerService;
   private final PostService postService;
   private final AuthenticationService authenticationService;
-  private final UploadService uploadService;
+  private final FileService fileService;
   private final UserRepository userRepository;
 
   @GetMapping("/me")
@@ -89,8 +90,19 @@ public class UserController {
     if (!Objects.equals(user.getId(), id)) {
       return ResponseEntity.status(403).build();
     }
-    String fileName = uploadService.uploadFile(image);
+    // Upload file
+    String fileName = fileService.uploadFile(image);
     User dbUser = userService.getUserById(user.getId());
+    String imageName = dbUser.getImageName();
+    // Delete existing file
+    if (imageName != null) {
+      try {
+        fileService.deleteFile(imageName);
+      } catch (HttpClientErrorException e) {
+        return ResponseEntity.status(e.getStatusCode()).build();
+      }
+    }
+
     dbUser.setImageName(fileName);
     return ResponseEntity.ok(userRepository.save(dbUser));
   }

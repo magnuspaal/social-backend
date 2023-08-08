@@ -1,4 +1,4 @@
-package com.magnus.social.upload.dto;
+package com.magnus.social.file.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

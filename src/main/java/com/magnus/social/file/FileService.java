@@ -1,15 +1,13 @@
-package com.magnus.social.upload;
+package com.magnus.social.file;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.magnus.social.config.ApiProperties;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,7 +16,7 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public class UploadService {
+public class FileService {
 
   private final ApiProperties apiProperties;
   public String uploadFile(MultipartFile file) {
@@ -38,5 +36,22 @@ public class UploadService {
     ResponseEntity<JsonNode> response = restTemplate.postForEntity(fileServerUrl + "/api/v1/upload", entity, JsonNode.class);
     JsonNode map = response.getBody();
     return Objects.requireNonNull(map).get("fileName").asText();
+  }
+
+  public boolean deleteFile(String imageName) {
+    RestTemplate restTemplate = new RestTemplate();
+
+    String fileServerUrl = apiProperties.getFileServerUrl();
+
+    try {
+      restTemplate.delete(fileServerUrl + "/api/v1/delete/" + imageName);
+    } catch (HttpClientErrorException e) {
+      if (e.getStatusCode() == HttpStatus.GONE) {
+        return false;
+      } else {
+        throw e;
+      }
+    }
+    return true;
   }
 }
