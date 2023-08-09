@@ -8,6 +8,10 @@ spring:
     password: password
     url: jdbc:postgresql://localhost:3213/social
     username: magnus
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 10MB
   jpa:
     hibernate:
       ddl-auto: update

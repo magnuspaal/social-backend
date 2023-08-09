@@ -44,6 +44,11 @@ public class PostService {
     return postRepository.save(post);
   }
 
+  public Post createImagePost(String content, String imageName, User user) {
+    Post post = new Post(content, imageName, user);
+    return postRepository.save(post);
+  }
+
   public Post replyToPost(Post post, User user, String content) {
     Post reply = new Post(content, user);
     reply.setReplyParent(post);

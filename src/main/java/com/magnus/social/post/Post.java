@@ -35,6 +35,7 @@ public class Post extends BaseEntity {
   )
   private Long id;
   private String content;
+  private String imageName;
 
   @ManyToOne
   @JoinColumn(name="user_id")
@@ -83,6 +84,12 @@ public class Post extends BaseEntity {
 
     List<Post> usersReposted = reposts.stream().filter((repost) -> Objects.equals(repost.getUser().getId(), user.getId())).toList();
     this.reposted = !usersReposted.isEmpty();
+  }
+
+  public Post(String content, String imageName, User user) {
+    this.content = content;
+    this.imageName = imageName;
+    this.user = user;
   }
 
   public Post(String content, User user) {
