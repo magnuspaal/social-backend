@@ -1,13 +1,13 @@
 server:
-  port: 8081
+  port: ${PORT}
   error:
     include-message: always
     include-binding-errors: always
 spring:
   datasource:
-    password: password
-    url: jdbc:postgresql://localhost:3213/social
-    username: magnus
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    url: ${DB_URL}
   servlet:
     multipart:
       max-file-size: 5MB
