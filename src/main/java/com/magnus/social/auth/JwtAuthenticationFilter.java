@@ -1,7 +1,6 @@
 package com.magnus.social.auth;
 
 import com.magnus.social.user.User;
-import com.magnus.social.user.UserRepository;
 import com.magnus.social.user.UserRole;
 import com.magnus.social.user.UserService;
 import io.jsonwebtoken.Claims;

@@ -14,6 +14,7 @@ import java.util.List;
 public class ApiProperties {
   private String allowedOrigins;
   private String fileServerUrl;
+  private String fileServerApiKey;
 
   public List<String> getAllowedOrigins() {
     return List.of(allowedOrigins.split(","));

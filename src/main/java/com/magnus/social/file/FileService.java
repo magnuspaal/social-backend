@@ -23,11 +23,13 @@ public class FileService {
     RestTemplate restTemplate = new RestTemplate();
 
     String fileServerUrl = apiProperties.getFileServerUrl();
+    String fileServerApiKey = apiProperties.getFileServerApiKey();
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.MULTIPART_FORM_DATA);
     headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
     headers.add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36");
+    headers.add("X-Api-Key", fileServerApiKey);
 
     MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
     body.add("file", file.getResource());
