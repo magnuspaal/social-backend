@@ -1,0 +1,12 @@
+services:
+  social-backend:
+    image: registry.digitalocean.com/magnus-images/social-backend:0.1.0
+    env_file: '.env'
+    container_name: social-backend
+    networks:
+      - social-app
+    restart: unless-stopped
+
+networks:
+  social-app:
+    external: true

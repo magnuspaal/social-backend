@@ -12,10 +12,5 @@ JWT_SECRET=
 ```
 
 #### Release
-* Bump version
-  * Change version in **pom.xml**
-  * Create commit with message `docs: bump to <version>`
-  * Create git tag with version
-* Run Maven `package` lifecycle action.
-* Build Docker image `docker build -t <registry/social-backend:version> --build-arg="APP_VERSION=<version>" .`
-* Push Docker image `docker push <registry/social-backend:version>`
+* Run `./cicd/deploy/bump <version>`
+* Push new commit and tag. GitHub Actions will deploy the container.
