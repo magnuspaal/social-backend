@@ -15,7 +15,7 @@ public class SearchService {
   private final UserRepository userRepository;
 
   public Search search(String keyword) {
-    List<User> users = userRepository.findByUsernameLike(keyword).orElseThrow();
+    List<User> users = userRepository.findByUsernameLikeIgnoreCase(keyword).orElseThrow();
     users.sort((user1, user2) -> user2.getFollowerCount() - user1.getFollowerCount());
     return new Search(users);
   };

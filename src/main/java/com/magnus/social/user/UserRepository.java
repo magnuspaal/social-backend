@@ -11,5 +11,6 @@ import java.util.Optional;
 @Repository
 @Transactional()
 public interface UserRepository extends JpaRepository<User, Long> {
-  Optional<List<User>> findByUsernameLike(String username);
+
+  Optional<List<User>> findByUsernameLikeIgnoreCase(String username);
 }
