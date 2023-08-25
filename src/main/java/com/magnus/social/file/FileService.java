@@ -44,6 +44,12 @@ public class FileService {
     RestTemplate restTemplate = new RestTemplate();
 
     String fileServerUrl = apiProperties.getFileServerUrl();
+    String fileServerApiKey = apiProperties.getFileServerApiKey();
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.add("X-Api-Key", fileServerApiKey);
+
+    HttpEntity<Object> entity = new HttpEntity<>(headers);
 
     try {
       restTemplate.delete(fileServerUrl + "/api/v1/delete/" + imageName);

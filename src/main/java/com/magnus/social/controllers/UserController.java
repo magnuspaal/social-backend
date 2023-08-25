@@ -81,7 +81,7 @@ public class UserController {
     return ResponseEntity.ok(followerService.toggleFollower(followedBy, followed));
   }
 
-  @PostMapping("/{id}/upload-image")
+  @PostMapping(value = "/{id}/upload-image", consumes="multipart/form-data")
   public ResponseEntity<User> uploadImage(
       @PathVariable Long id,
       @RequestParam(name = "image") MultipartFile image

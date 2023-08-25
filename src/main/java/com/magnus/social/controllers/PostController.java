@@ -6,6 +6,7 @@ import com.magnus.social.like.LikeService;
 import com.magnus.social.post.Post;
 import com.magnus.social.post.PostService;
 import com.magnus.social.post.dto.PostRequest;
+import com.magnus.social.post.dto.ReplyResponse;
 import com.magnus.social.user.User;
 import com.magnus.social.user.UserService;
 import jakarta.validation.Valid;
@@ -79,10 +80,13 @@ public class PostController {
   }
 
   @PostMapping(value = "/{id}/reply", consumes="multipart/form-data")
-  public ResponseEntity<Post> replyToPost(@PathVariable Long id, @Valid PostRequest body) {
+  public ResponseEntity<ReplyResponse> replyToPost(@PathVariable Long id, @Valid PostRequest body) {
     User user = authenticationService.getAuthenticatedUser();
+    User dbUser = userService.getUserById(user.getId());
     Post post = postService.getPostById(id);
-    return ResponseEntity.ok(postService.replyToPost(post, user, body.getContent()));
+    Post reply = postService.replyToPost(post, dbUser, body.getContent());
+    post.addReply();
+    return ResponseEntity.ok(ReplyResponse.builder().reply(reply).replyParent(post).build());
   }
 
   @PostMapping("/{id}/repost")

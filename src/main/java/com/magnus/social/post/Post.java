@@ -68,6 +68,9 @@ public class Post extends BaseEntity {
   private Integer repostCount = 0;
 
   @Transient
+  private Integer replyCount = 0;
+
+  @Transient
   private boolean liked = false;
 
   @Transient
@@ -77,6 +80,7 @@ public class Post extends BaseEntity {
   private void postLoad() {
     this.likeCount = this.getLikes().size();
     this.repostCount = this.getReposts().size();
+    this.replyCount = this.getReplies().size();
 
     User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     List<Like> usersLiked = likes.stream().filter((like) -> Objects.equals(like.getUser().getId(), user.getId())).toList();
@@ -121,5 +125,9 @@ public class Post extends BaseEntity {
       this.repostCount -= 1;
       this.reposted = false;
     }
+  }
+
+  public void addReply() {
+    this.replyCount += 1;
   }
 }
