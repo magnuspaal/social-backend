@@ -52,7 +52,7 @@ public class FileService {
     HttpEntity<Object> entity = new HttpEntity<>(headers);
 
     try {
-      restTemplate.delete(fileServerUrl + "/api/v1/delete/" + imageName);
+      restTemplate.exchange(fileServerUrl + "/api/v1/delete/" + imageName, HttpMethod.DELETE, entity, void.class);
     } catch (HttpClientErrorException e) {
       if (e.getStatusCode() == HttpStatus.GONE) {
         return false;
