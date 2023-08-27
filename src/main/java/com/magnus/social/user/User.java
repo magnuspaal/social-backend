@@ -38,6 +38,9 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
+    @OneToMany(mappedBy="user")
+    private List<UserSettings> settings;
+
     @OneToMany(mappedBy="user", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Post> posts;
@@ -71,6 +74,10 @@ public class User extends BaseEntity {
 
     @Transient
     private Integer followingCount;
+
+    public boolean checkIfUserSettingExists(UserSettingsKeys key, UserSettingsValues value) {
+        return this.settings.stream().anyMatch((userSetting -> userSetting.getKey().equals(key) && userSetting.getValue().equals(value)));
+    }
 
     @PostLoad
     private void postLoad() {

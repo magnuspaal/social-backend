@@ -1,12 +1,15 @@
 package com.magnus.social.controllers;
 
 import com.magnus.social.auth.AuthenticationService;
+import com.magnus.social.exception.exceptions.PostingNotAllowedException;
 import com.magnus.social.file.FileService;
 import com.magnus.social.like.LikeService;
 import com.magnus.social.post.Post;
 import com.magnus.social.post.PostService;
 import com.magnus.social.post.dto.PostRequest;
 import com.magnus.social.post.dto.ReplyResponse;
+import com.magnus.social.settings.UserSettingsKeys;
+import com.magnus.social.settings.UserSettingsValues;
 import com.magnus.social.user.User;
 import com.magnus.social.user.UserService;
 import jakarta.validation.Valid;
