@@ -58,17 +58,21 @@ public class PostController {
   */
 
   @PostMapping(consumes="multipart/form-data")
-  public ResponseEntity<Post> createPost(@Valid PostRequest body) {
+  public ResponseEntity<Post> createPost(@Valid PostRequest body) throws PostingNotAllowedException {
     User authenticatedUser = authenticationService.getAuthenticatedUser();
     User user = userService.getUserById(authenticatedUser.getId());
-    Post post;
-    if (body.getImage() != null) {
-      String filename = fileService.uploadFile(body.getImage());
-      post = postService.createImagePost(body.getContent(), filename, user);
+    if(!user.checkIfUserSettingExists(UserSettingsKeys.POSTING_DISALLOWED, UserSettingsValues.ENABLED)) {
+      Post post;
+      if (body.getImage() != null) {
+        String filename = fileService.uploadFile(body.getImage());
+        post = postService.createImagePost(body.getContent(), filename, user);
+      } else {
+        post = postService.createPost(body.getContent(), user);
+      }
+      return ResponseEntity.ok(post);
     } else {
-      post = postService.createPost(body.getContent(), user);
+      throw new PostingNotAllowedException();
     }
-    return ResponseEntity.ok(post);
   }
 
   @PostMapping("/{id}/like")
@@ -80,13 +84,18 @@ public class PostController {
   }
 
   @PostMapping(value = "/{id}/reply", consumes="multipart/form-data")
-  public ResponseEntity<ReplyResponse> replyToPost(@PathVariable Long id, @Valid PostRequest body) {
+  public ResponseEntity<ReplyResponse> replyToPost(@PathVariable Long id, @Valid PostRequest body) throws PostingNotAllowedException {
     User user = authenticationService.getAuthenticatedUser();
     User dbUser = userService.getUserById(user.getId());
-    Post post = postService.getPostById(id);
-    Post reply = postService.replyToPost(post, dbUser, body.getContent());
-    post.addReply();
-    return ResponseEntity.ok(ReplyResponse.builder().reply(reply).replyParent(post).build());
+
+    if (!dbUser.checkIfUserSettingExists(UserSettingsKeys.POSTING_DISALLOWED, UserSettingsValues.ENABLED)) {
+      Post post = postService.getPostById(id);
+      Post reply = postService.replyToPost(post, dbUser, body.getContent());
+      post.addReply();
+      return ResponseEntity.ok(ReplyResponse.builder().reply(reply).replyParent(post).build());
+    } else {
+      throw new PostingNotAllowedException();
+    }
   }
 
   @PostMapping("/{id}/repost")

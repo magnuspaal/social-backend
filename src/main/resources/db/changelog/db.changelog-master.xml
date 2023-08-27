@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1693159880134-1" author="mpaal (generated)">
+        <createSequence incrementBy="1" sequenceName="follower_sequence" startValue="1"/>
+    </changeSet>
+    <changeSet id="1693159880134-2" author="mpaal (generated)">
+        <createSequence incrementBy="1" sequenceName="like_sequence" startValue="1"/>
+    </changeSet>
+    <changeSet id="1693159880134-3" author="mpaal (generated)">
+        <createSequence incrementBy="1" sequenceName="post_sequence" startValue="1"/>
+    </changeSet>
+    <changeSet id="1693159880134-4" author="mpaal (generated)">
+        <createSequence incrementBy="1" sequenceName="user_settings_sequence" startValue="1"/>
+    </changeSet>
+    <changeSet id="1693159880134-5" author="mpaal (generated)">
+        <createTable tableName="follow">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_follow"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="followed_by" type="BIGINT"/>
+            <column name="followed" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1693159880134-6" author="mpaal (generated)">
+        <createTable tableName="post">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_post"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="content" type="VARCHAR(255)"/>
+            <column name="image_name" type="VARCHAR(255)"/>
+            <column name="user_id" type="BIGINT"/>
+            <column name="reply_parent_id" type="BIGINT"/>
+            <column name="repost_parent_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1693159880134-7" author="mpaal (generated)">
+        <createTable tableName="post_like">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_post_like"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="user_id" type="BIGINT"/>
+            <column name="post_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1693159880134-8" author="mpaal (generated)">
+        <createTable tableName="user_data">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user_data"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="first_name" type="VARCHAR(255)"/>
+            <column name="last_name" type="VARCHAR(255)"/>
+            <column name="email" type="VARCHAR(255)"/>
+            <column name="username" type="VARCHAR(255)"/>
+            <column name="image_name" type="VARCHAR(255)"/>
+            <column name="user_role" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1693159880134-9" author="mpaal (generated)">
+        <createTable tableName="user_settings">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_usersettings"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="deleted_at" type="DATETIME"/>
+            <column name="user_id" type="BIGINT"/>
+            <column name="key" type="VARCHAR(255)"/>
+            <column name="value" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1693159880134-10" author="mpaal (generated)">
+        <addUniqueConstraint columnNames="followed_by, followed, deleted_at" constraintName="UniqueFollowedByAndFollowed"
+                             tableName="follow"/>
+    </changeSet>
+    <changeSet id="1693159880134-11" author="mpaal (generated)">
+        <addUniqueConstraint columnNames="user_id, key" constraintName="UniqueUserAndKey" tableName="user_settings"/>
+    </changeSet>
+    <changeSet id="1693159880134-12" author="mpaal (generated)">
+        <addUniqueConstraint columnNames="user_id, post_id, deleted_at" constraintName="UniqueUserAndPost"
+                             tableName="post_like"/>
+    </changeSet>
+    <changeSet id="1693159880134-13" author="mpaal (generated)">
+        <addUniqueConstraint columnNames="user_id, repost_parent_id, deleted_at" constraintName="UniqueUserAndRepost"
+                             tableName="post"/>
+    </changeSet>
+    <changeSet id="1693159880134-14" author="mpaal (generated)">
+        <addForeignKeyConstraint baseColumnNames="followed" baseTableName="follow" constraintName="FK_FOLLOW_ON_FOLLOWED"
+                                 referencedColumnNames="id" referencedTableName="user_data"/>
+    </changeSet>
+    <changeSet id="1693159880134-15" author="mpaal (generated)">
+        <addForeignKeyConstraint baseColumnNames="followed_by" baseTableName="follow"
+                                 constraintName="FK_FOLLOW_ON_FOLLOWED_BY" referencedColumnNames="id"
+                                 referencedTableName="user_data"/>
+    </changeSet>
+    <changeSet id="1693159880134-16" author="mpaal (generated)">
+        <addForeignKeyConstraint baseColumnNames="post_id" baseTableName="post_like" constraintName="FK_POST_LIKE_ON_POST"
+                                 referencedColumnNames="id" referencedTableName="post"/>
+    </changeSet>
+    <changeSet id="1693159880134-17" author="mpaal (generated)">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="post_like" constraintName="FK_POST_LIKE_ON_USER"
+                                 referencedColumnNames="id" referencedTableName="user_data"/>
+    </changeSet>
+    <changeSet id="1693159880134-18" author="mpaal (generated)">
+        <addForeignKeyConstraint baseColumnNames="reply_parent_id" baseTableName="post"
+                                 constraintName="FK_POST_ON_REPLY_PARENT" referencedColumnNames="id"
+                                 referencedTableName="post"/>
+    </changeSet>
+    <changeSet id="1693159880134-19" author="mpaal (generated)">
+        <addForeignKeyConstraint baseColumnNames="repost_parent_id" baseTableName="post"
+                                 constraintName="FK_POST_ON_REPOST_PARENT" referencedColumnNames="id"
+                                 referencedTableName="post"/>
+    </changeSet>
+    <changeSet id="1693159880134-20" author="mpaal (generated)">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="post" constraintName="FK_POST_ON_USER"
+                                 referencedColumnNames="id" referencedTableName="user_data"/>
+    </changeSet>
+    <changeSet id="1693159880134-21" author="mpaal (generated)">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_settings"
+                                 constraintName="FK_USERSETTINGS_ON_USER" referencedColumnNames="id"
+                                 referencedTableName="user_data"/>
+    </changeSet>
+</databaseChangeLog>
