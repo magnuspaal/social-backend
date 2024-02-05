@@ -1,9 +1,8 @@
-package com.magnus.social.e2e;
+package com.magnus.social.controllers;
 
 import com.magnus.social.SocialApplication;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,24 +10,27 @@ import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.test.context.*;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = SocialApplication.class)
 @ActiveProfiles("tc")
 @TestPropertySource(
     locations = "classpath:application-test.properties")
 @ContextConfiguration(initializers = {UserControllerTest.Initializer.class})
 @AutoConfigureMockMvc
+@Testcontainers
 public class UserControllerTest {
 
-  @ClassRule
+  @Container
   public static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer("postgres:11.1")
       .withDatabaseName("user-controller-test")
       .withUsername("username")

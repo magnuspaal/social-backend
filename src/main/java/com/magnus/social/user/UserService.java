@@ -2,6 +2,7 @@ package com.magnus.social.user;
 
 import com.magnus.social.follow.Follow;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,7 +11,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
 
-  private final UserRepository userRepository;
+  @Autowired
+  private UserRepository userRepository;
 
   public User getUserById(Long id) {
     return userRepository.findById(id)
