@@ -22,7 +22,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = SocialApplication.class)
-@ActiveProfiles("tc")
 @TestPropertySource(
     locations = "classpath:application-test.properties")
 @ContextConfiguration(initializers = {UserControllerTest.Initializer.class})
