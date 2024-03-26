@@ -5,7 +5,7 @@ import com.magnus.social.follow.Follow;
 import com.magnus.social.follow.FollowService;
 import com.magnus.social.post.Post;
 import com.magnus.social.post.PostService;
-import com.magnus.social.file.FileService;
+import com.magnus.social.services.FileService;
 import com.magnus.social.user.User;
 import com.magnus.social.user.UserRepository;
 import com.magnus.social.user.UserService;
@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
 

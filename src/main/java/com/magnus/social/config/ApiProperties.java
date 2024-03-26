@@ -1,22 +1,28 @@
 package com.magnus.social.config;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.context.properties.bind.ConstructorBinding;
 
 import java.util.List;
 
-@Configuration
 @ConfigurationProperties(prefix = "application.api")
 @Getter
-@Setter
 public class ApiProperties {
-  private String allowedOrigins;
-  private String fileServerUrl;
-  private String fileServerApiKey;
+  @NotBlank
+  private final List<String> allowedOrigins;
 
-  public List<String> getAllowedOrigins() {
-    return List.of(allowedOrigins.split(","));
+  @NotBlank
+  private final String fileServerUrl;
+
+  @NotBlank
+  private final String fileServerApiKey;
+
+  @ConstructorBinding
+  public ApiProperties(List<String> allowedOrigins, String fileServerUrl, String fileServerApiKey) {
+    this.allowedOrigins = allowedOrigins;
+    this.fileServerUrl = fileServerUrl;
+    this.fileServerApiKey = fileServerApiKey;
   }
 }

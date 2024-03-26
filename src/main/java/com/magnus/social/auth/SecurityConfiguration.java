@@ -23,6 +23,7 @@ import java.util.List;
 public class SecurityConfiguration {
 
   private final JwtAuthenticationFilter jwtAuthenticationfilter;
+  private final ExceptionHandlerFilter exceptionHandlerFilter;
   private final ApiProperties apiProperties;
 
   @Bean
@@ -34,7 +35,8 @@ public class SecurityConfiguration {
                 .anyRequest().authenticated()
         )
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
-        .addFilterBefore(jwtAuthenticationfilter, UsernamePasswordAuthenticationFilter.class);
+        .addFilterBefore(jwtAuthenticationfilter, UsernamePasswordAuthenticationFilter.class)
+        .addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class);
     return http.build();
   }
 

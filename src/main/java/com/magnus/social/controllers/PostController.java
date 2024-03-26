@@ -2,7 +2,7 @@ package com.magnus.social.controllers;
 
 import com.magnus.social.auth.AuthenticationService;
 import com.magnus.social.exception.exceptions.PostingNotAllowedException;
-import com.magnus.social.file.FileService;
+import com.magnus.social.services.FileService;
 import com.magnus.social.like.LikeService;
 import com.magnus.social.post.Post;
 import com.magnus.social.post.PostService;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/post")
+@RequestMapping("/post")
 @RequiredArgsConstructor
 public class PostController {
 
