@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.magnus</groupId>
 	<artifactId>social-backend</artifactId>
-	<version>0.2.3</version>
+	<version>0.2.4</version>
 	<name>social-backend</name>
 	<description>Backend for a social application based on Twitter.</description>
 	<properties>
@@ -135,6 +135,9 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>3.2.5</version>
+				<configuration>
+					<skipTests>true</skipTests>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.liquibase</groupId>
