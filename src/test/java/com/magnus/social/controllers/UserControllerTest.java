@@ -49,7 +49,7 @@ public class UserControllerTest {
 
   @Test
   public void Given_ValidTokenButUserNotInDB_WhenUserMeCalled_Then_ShouldCreateUserAndReturnUser() throws Exception {
-    mvc.perform(get("/api/v1/user/me")
+    mvc.perform(get("/user/me")
           .header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJmaXJzdF9uYW1lIjoiSm9obiIsImlkIjo3LCJyb2xlIjoiVVNFUiIsInVzZXJuYW1lIjoiam9obi5kb2UiLCJsYXN0X25hbWUiOiJEb2UiLCJzdWIiOiJqb2huLmRvZUBlbWFpbC5jb20iLCJpYXQiOjE3MDY2MjM1NTQsImV4cCI6MzI1MDYyMjk0ODR9.9cDSj9ERrse3CLiqg7xOeczY-lrlYM2rOb0kztUBVhQ"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.id").value("7"))
