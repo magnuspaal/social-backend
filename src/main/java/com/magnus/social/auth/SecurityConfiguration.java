@@ -34,7 +34,7 @@ public class SecurityConfiguration {
             authorizeHttpRequests
                 .anyRequest().authenticated()
         )
-        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .addFilterBefore(jwtAuthenticationfilter, UsernamePasswordAuthenticationFilter.class)
         .addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class);
     return http.build();
