@@ -1,6 +1,6 @@
 services:
   social-backend:
-    image: registry.digitalocean.com/magnus-images/social:backend-0.2.5
+    image: registry.digitalocean.com/magnus-images/social:backend-0.2.6
     env_file: '.env'
     container_name: social-backend
     networks:
