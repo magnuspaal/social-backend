@@ -5,10 +5,13 @@ based on Twitter.
 
 #### Environment arguments
 ```agsl
+PORT=
 ALLOWED_ORIGINS=http://localhost:3000
 FILE_SERVER_URL=http://localhost:8082
-FILE_SERVER_API_KEY=
 JWT_SECRET=
+DB_USERNAME=
+DB_PASSWORD=
+DB_URL=
 ```
 
 #### Release

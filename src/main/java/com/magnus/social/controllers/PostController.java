@@ -61,13 +61,13 @@ public class PostController {
   */
 
   @PostMapping(consumes="multipart/form-data")
-  public ResponseEntity<Post> createPost(@Valid PostRequest body) throws PostingNotAllowedException {
+  public ResponseEntity<Post> createPost(@CookieValue("authToken") String authToken, @Valid PostRequest body) throws PostingNotAllowedException {
     User authenticatedUser = authenticationService.getAuthenticatedUser();
     User user = userService.getUserById(authenticatedUser.getId());
     if(!user.checkIfUserSettingExists(UserSettingsKeys.POSTING_DISALLOWED, UserSettingsValues.ENABLED)) {
       Post post;
       if (body.getImage() != null) {
-        String filename = fileService.uploadFile(body.getImage());
+        String filename = fileService.uploadFile(body.getImage(), authToken);
         post = postService.createImagePost(body.getContent(), filename, user);
       } else {
         post = postService.createPost(body.getContent(), user);

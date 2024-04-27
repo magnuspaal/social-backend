@@ -16,13 +16,9 @@ public class ApiProperties {
   @NotBlank
   private final String fileServerUrl;
 
-  @NotBlank
-  private final String fileServerApiKey;
-
   @ConstructorBinding
   public ApiProperties(List<String> allowedOrigins, String fileServerUrl, String fileServerApiKey) {
     this.allowedOrigins = allowedOrigins;
     this.fileServerUrl = fileServerUrl;
-    this.fileServerApiKey = fileServerApiKey;
   }
 }

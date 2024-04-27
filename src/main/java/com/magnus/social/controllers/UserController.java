@@ -83,6 +83,7 @@ public class UserController {
 
   @PostMapping(value = "/{id}/upload-image", consumes="multipart/form-data")
   public ResponseEntity<User> uploadImage(
+      @CookieValue("authToken") String authToken,
       @PathVariable Long id,
       @RequestParam(name = "image") MultipartFile image
   ) {
@@ -91,13 +92,13 @@ public class UserController {
       return ResponseEntity.status(403).build();
     }
     // Upload file
-    String fileName = fileService.uploadFile(image);
+    String fileName = fileService.uploadFile(image, authToken);
     User dbUser = userService.getUserById(user.getId());
     String imageName = dbUser.getImageName();
     // Delete existing file
     if (imageName != null) {
       try {
-        fileService.deleteFile(imageName);
+        fileService.deleteFile(imageName, authToken);
       } catch (HttpClientErrorException e) {
         return ResponseEntity.status(e.getStatusCode()).build();
       }
