@@ -12,7 +12,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -25,7 +25,7 @@ import java.util.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "user_data")
-@Where(clause = "deleted_at IS NULL")
+@SQLRestriction("deleted_at IS NULL")
 public class User extends BaseEntity {
 
     @Id
@@ -78,8 +78,8 @@ public class User extends BaseEntity {
     @Transient
     private Integer followingCount;
 
-    public boolean checkIfUserSettingExists(UserSettingsKeys key, UserSettingsValues value) {
-        return this.settings.stream().anyMatch((userSetting -> userSetting.getKey().equals(key) && userSetting.getValue().equals(value)));
+    public boolean checkIfUserSettingsDoNotExist(UserSettingsKeys key, UserSettingsValues value) {
+        return this.settings.stream().noneMatch((userSetting -> userSetting.getKey().equals(key) && userSetting.getValue().equals(value)));
     }
 
     @PostLoad
@@ -99,5 +99,10 @@ public class User extends BaseEntity {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(userRole.name());
         return Collections.singletonList(authority);
+    }
+
+    @Override
+    public String toString() {
+        return "{ id: " + this.getId() + " }";
     }
 }

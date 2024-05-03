@@ -64,7 +64,7 @@ public class PostController {
   public ResponseEntity<Post> createPost(@CookieValue("authToken") String authToken, @Valid PostRequest body) throws PostingNotAllowedException {
     User authenticatedUser = authenticationService.getAuthenticatedUser();
     User user = userService.getUserById(authenticatedUser.getId());
-    if(!user.checkIfUserSettingExists(UserSettingsKeys.POSTING_DISALLOWED, UserSettingsValues.ENABLED)) {
+    if(user.checkIfUserSettingsDoNotExist(UserSettingsKeys.POSTING_DISALLOWED, UserSettingsValues.ENABLED)) {
       Post post;
       if (body.getImage() != null) {
         String filename = fileService.uploadFile(body.getImage(), authToken);
@@ -91,7 +91,7 @@ public class PostController {
     User user = authenticationService.getAuthenticatedUser();
     User dbUser = userService.getUserById(user.getId());
 
-    if (!dbUser.checkIfUserSettingExists(UserSettingsKeys.POSTING_DISALLOWED, UserSettingsValues.ENABLED)) {
+    if (dbUser.checkIfUserSettingsDoNotExist(UserSettingsKeys.POSTING_DISALLOWED, UserSettingsValues.ENABLED)) {
       Post post = postService.getPostById(id);
       Post reply = postService.replyToPost(post, dbUser, body.getContent());
       post.addReply();

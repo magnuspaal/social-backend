@@ -1,7 +1,7 @@
 package com.magnus.social.post;
 
+import com.magnus.social.auth.AuthenticationService;
 import com.magnus.social.user.User;
-import com.magnus.social.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,24 +15,43 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class PostService {
   private final PostRepository postRepository;
+  private final AuthenticationService authenticationService;
 
   /*
    * GET METHODS
    */
   public Post getPostById(Long id) {
-    return postRepository.findById(id).orElseThrow(() -> new NoSuchElementException("post not found"));
+    User user = authenticationService.getAuthenticatedUser();
+    Post post = postRepository.findById(id).orElseThrow(() -> new NoSuchElementException("post not found"));
+    setIfUserHasReposted(user, post);
+    return post;
   }
 
   public List<Post> getFeedPosts(User user, List<User> following, Integer limit, Integer offset) {
-    return postRepository.findFeedPosts(user, following, limit, offset).orElse(new ArrayList<>());
+    List<Post> posts = postRepository.findFeedPosts(user, following, limit, offset).orElse(new ArrayList<>());
+    for (Post post: posts) { setIfUserHasReposted(user, post); }
+    return posts;
   }
 
   public List<Post> getPostReplies(Post post, Integer limit, Integer offset) {
-    return postRepository.findReplies(post, limit, offset).orElse(new ArrayList<>());
+    User user = authenticationService.getAuthenticatedUser();
+    List<Post> posts = postRepository.findReplies(post, limit, offset).orElse(new ArrayList<>());
+    for (Post listPost: posts) { setIfUserHasReposted(user, listPost); }
+    return posts;
   }
 
   public List<Post> getUserPosts(User user, Integer limit, Integer offset) {
-    return postRepository.findByUser(user, limit, offset).orElse(new ArrayList<>());
+    User authenticatedUser = authenticationService.getAuthenticatedUser();
+    List<Post> posts = postRepository.findByUser(user, limit, offset).orElse(new ArrayList<>());
+    for (Post post: posts) { setIfUserHasReposted(authenticatedUser, post); }
+    return posts;
+  }
+
+  private void setIfUserHasReposted(User user, Post post) {
+    if (post.getReposts().size() > 0) {
+      Post repost = postRepository.findPostByUserAndRepostParent(user, post).orElse(null);
+      post.setReposted(repost != null);
+    }
   }
 
   /*
@@ -56,7 +75,7 @@ public class PostService {
   }
 
   public Post repostPost(Post post, User user) {
-    Post repost = postRepository.findRepostByUserAndRepostParent(user, post).orElse(null);
+    Post repost = postRepository.findPostByUserAndRepostParent(user, post).orElse(null);
     if (repost == null) {
       Post newRepost = new Post(user);
       newRepost.setRepostParent(post);

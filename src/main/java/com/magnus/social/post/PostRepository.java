@@ -28,5 +28,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
   @Query("SELECT p FROM Post p WHERE p.user = :user ORDER BY p.createdAt DESC LIMIT :limit OFFSET :offset")
   Optional<List<Post>> findByUser(@Param("user") User user, @Param("limit") Integer limit, @Param("offset") Integer offset);
 
-  Optional<Post> findRepostByUserAndRepostParent(@Param("user") User user, @Param("post") Post post);
+  @Query("SELECT p FROM Post p WHERE p.user = :user AND p.repostParent = :repostParent")
+  Optional<Post> findPostByUserAndRepostParent(@Param("user") User user, @Param("repostParent") Post post);
 }
